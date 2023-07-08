@@ -1,19 +1,27 @@
-version: '3'
+version: '3.8'
 services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
   web:
     build:
       context: .
       dockerfile: Dockerfile.web
     ports:
       - "80:80"
-    volumes:
-      - .:/app
-    environment:
-      - FLASK_APP=app.py
-      - FLASK_ENV=development
-  db:
+    depends_on:
+      - app
+  app:
     build:
       context: .
-      dockerfile: Dockerfile.db
+      dockerfile: Dockerfile.app
     ports:
-      - "5432:5432"
+      - "5000:5000"
+    depends_on:
+      - db

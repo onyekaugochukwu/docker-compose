@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 import psycopg2
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 
 def get_firstname():
     conn = psycopg2.connect(
@@ -21,3 +21,6 @@ def get_firstname():
 def index():
     firstname = get_firstname()
     return render_template('index.html', firstname=firstname)
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
